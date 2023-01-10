@@ -24,6 +24,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> saveUser(User user) {
 
+        if (userRepository.existsByUserEmail(user.getUserEmail())) {
+            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+        }
+
         userRepository.save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
